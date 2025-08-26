@@ -1,0 +1,7 @@
+pyspark
+pandas
+sqlalchemy
+psycopg2-binary
+pyarrow
+streamlit
+plotly

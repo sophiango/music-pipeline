@@ -21,7 +21,8 @@ services:
 
   postgres:
     image: postgres:16
-    ports: [ "${POSTGRES_PORT:-5432}:5432" ]
+    ports:
+      - "5432:5432"
     environment:
       POSTGRES_USER: ${POSTGRES_USER}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
@@ -31,3 +32,17 @@ services:
       interval: 5s
       timeout: 5s
       retries: 10
+
+  streamlit:
+    image: python:3.11
+    container_name: music_streamlit
+    working_dir: /app
+    volumes:
+      - ./dashboard:/app
+    ports:
+      - "8501:8501"
+    depends_on:
+      - postgres
+    command: >
+      bash -c "pip install streamlit psycopg2-binary pandas plotly &&
+               streamlit run dashboard.py --server.port 8501 --server.address 0.0.0.0"
